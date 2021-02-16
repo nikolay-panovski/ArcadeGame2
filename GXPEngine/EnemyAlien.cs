@@ -18,6 +18,7 @@ public class EnemyAlien : EnemyGeneric
 
     private void Update()
     {
-        actWithDistCooldown();
+        shootWithDistCooldown();
+        destroySelfOnNoHP();
     }
 }

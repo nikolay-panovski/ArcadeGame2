@@ -59,6 +59,7 @@
     <Compile Include="EnemyAlien.cs" />
     <Compile Include="EnemyGeneric.cs" />
     <Compile Include="EnemyHuman.cs" />
+    <Compile Include="EnemyRobot.cs" />
     <Compile Include="GameOver.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="RevolverEnemyBullet.cs" />
     <Compile Include="SpawnerEnemies.cs" />
     <Compile Include="SpawnManager.cs" />
     <Compile Include="PickupCoin.cs" />

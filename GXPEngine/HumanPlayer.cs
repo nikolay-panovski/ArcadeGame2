@@ -67,6 +67,7 @@ public class HumanPlayer : Player
         {
             RevolverBullet bullet = new RevolverBullet(this.x + this.width * direction.x, this.y + this.height * direction.y);
             bullet_handler.AddChild(bullet);
+            new Sound("Cowboy_Action_Revolver_Shot.wav").Play();
 
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;

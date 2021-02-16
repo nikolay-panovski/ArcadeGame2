@@ -2,16 +2,16 @@
 using GXPEngine;
 using GXPEngine.Core;
 
-public class RevolverBullet : Sprite
+public class RevolverEnemyBullet : Sprite   // only doing this so that enemy bullets do not kill enemies(?)
+                                            // I'll leave this class dormant for now, full copy of RevolverBullet 16/02
 {
     private Collision coll_info = null;
     public float x_speed { get; set; }
     public float y_speed { get; set; }
 
-    // GRAVITY variables for ALIEN "bullets" (acid), should differentiate (move to different class/subclass)
     private float pull_force;
     private float seconds_after_spawn;
-    public RevolverBullet(float newX, float newY) : base("bullet.png")
+    public RevolverEnemyBullet(float newX, float newY) : base("bullet.png")
     {
         SetOrigin(width / 2, height / 2);
         x = newX;
@@ -23,7 +23,6 @@ public class RevolverBullet : Sprite
         if (coll_info != null)
         {  
             if (coll_info.other is HumanPlayer || coll_info.other is AlienPlayer) (coll_info.other as Player).HP--;
-            if (coll_info.other is EnemyGeneric) (coll_info.other as EnemyGeneric).HP--;
             LateDestroy();
         }
     }

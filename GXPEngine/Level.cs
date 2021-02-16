@@ -14,7 +14,10 @@ class Level : GameObject
     private Camera viewport;
     private List<EnemyGeneric> enemies1 = new List<EnemyGeneric>();     // altered FindObjectsOfType<> to return a List. dunno why it doesn't already do that.
     private PickupCoin debug_coin = new PickupCoin();
-    private int level_score;
+    public int level_score { get; set; }
+    public int distance_score { get; set; }
+    public int enemies_score { get; set; }
+    public int pickups_score { get; set; }
     public Level(string filename) : base()
     {
         viewport = new Camera(0, 0, (game as MyGame).width, (game as MyGame).height);
@@ -58,8 +61,7 @@ class Level : GameObject
     private void updateCameraX()
     {
         viewport.x += 0.3f;
-        level_score = ((int)viewport.x - (game as MyGame).width / 2) / 4;
-        Console.WriteLine(level_score);
+        distance_score = ((int)viewport.x - (game as MyGame).width / 2) / 4;
     }
 
     private void destroyOutOfBounds()
@@ -78,6 +80,9 @@ class Level : GameObject
     private void Update()
     {
         updateCameraX();
+
+        level_score = distance_score + enemies_score + pickups_score;
+        //Console.WriteLine(level_score);
 
         // game over routine, adapt later if/when necessary
         // probably send player to hell I mean game over also for reaching an end

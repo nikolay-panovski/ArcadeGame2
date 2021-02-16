@@ -41,6 +41,7 @@ public class EnemyGeneric : AnimationSprite
     {
         RevolverBullet bullet = new RevolverBullet(this.x + this.width * direction.x, this.y + this.height * direction.y);
         bullet_handler.AddChild(bullet);
+        new Sound("Enemy_Action_Rifle_Shot.wav").Play();
 
         if (direction.x == 1) bullet.rotation = 0;
         else if (direction.x == -1) bullet.rotation = 180;
@@ -49,7 +50,7 @@ public class EnemyGeneric : AnimationSprite
         //bullet.y_speed = 1.4f * direction.y;
     }
 
-    protected void actWithDistCooldown()
+    protected void shootWithDistCooldown()
     {
         cooldown += Time.deltaTime / 1000f;
         if (cooldown > 2 && (DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
@@ -62,6 +63,15 @@ public class EnemyGeneric : AnimationSprite
         }
 
         else if (cooldown < 1 || cooldown > 2) Move(-speed, 0);
+    }
+
+    protected void destroySelfOnNoHP()
+    {
+        if (HP <= 0)
+        {
+            (parent as Level).enemies_score += points_value;
+            this.LateDestroy();
+        }
     }
 
     private void Update()

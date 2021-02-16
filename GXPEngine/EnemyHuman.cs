@@ -18,6 +18,7 @@ public class EnemyHuman : EnemyGeneric
 
     private void Update()
     {
-        actWithDistCooldown();
+        shootWithDistCooldown();
+        destroySelfOnNoHP();
     }
 }
