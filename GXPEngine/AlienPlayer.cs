@@ -14,19 +14,19 @@ public class AlienPlayer : Player
 
     private void movementHandle()
     {
-        if (Input.GetKey(Key.LEFT) ) Move(-x_speed, 0);
-        if (Input.GetKey(Key.RIGHT)) Move(x_speed, 0);
+        if (Input.GetKey(Key.LEFT) ) coll_info = MoveUntilCollision(-x_speed, 0);
+        if (Input.GetKey(Key.RIGHT)) coll_info = MoveUntilCollision(x_speed, 0);
     }
 
     private void JumpAndGravityHandle()
     {
-        velocity_y += 0.6f;     
+        velocity_y += 0.08f;     
         if (!MoveAndCollide(0f, velocity_y))
         {
             if (velocity_y > 0f && Input.GetKey(Key.UP)) // if no velocity_y check here, 
                                                          // does not clip through ceiling, sticks instead, clips on key release
             {
-                velocity_y = -14f;
+                velocity_y = -4f;
             }
             else velocity_y = 0f;        // player has landed
         }
@@ -59,7 +59,7 @@ public class AlienPlayer : Player
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;
 
-            bullet.x_speed = 1.4f * direction.x;
+            bullet.x_speed = 1.6f * direction.x;        // smaller than usual bullet speed because tree
             //bullet.y_speed = 1.4f * direction.y;
             bullet_cooldown = 2;
         }

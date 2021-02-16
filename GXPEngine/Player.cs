@@ -12,7 +12,7 @@ public class Player : AnimationSprite
     public int HP { get; set; }               // for HP
     //protected float shield_timer;           // for Energy Shield
 
-    protected float x_speed = 1.8f;
+    protected float x_speed = 0.8f;
 
     protected float velocity_y = 0.0f;
 
@@ -39,6 +39,12 @@ public class Player : AnimationSprite
 
     private void resolveCollision(Sprite subject, Sprite collider, float deltaX, float deltaY)
     {
+        if (collider is RevolverBullet)
+        {
+            collider.LateDestroy();
+            HP--;
+            Console.WriteLine(HP);
+        }
         if (collider is PickupCoin)
         {
             Console.WriteLine("coin destroyed!");
@@ -56,7 +62,8 @@ public class Player : AnimationSprite
             collider.LateDestroy();
         }
 
-        else    // else is not any object we want special collision with -> treat as walls etc.
+        else    // ELSE is not any object we want special collision with -> treat as walls etc.
+                // seems to run for everything anyway
         {
             if (deltaX < 0) subject.x = (collider.x + collider.width / 2 + subject.width / 2);  // refactored for origin at middle
             if (deltaX > 0) subject.x = (collider.x - collider.width / 2 - subject.width / 2);

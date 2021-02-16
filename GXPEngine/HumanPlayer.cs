@@ -29,7 +29,7 @@ public class HumanPlayer : Player
 
     private void JumpAndGravityHandle()
     {
-        velocity_y += 0.04f;
+        velocity_y += 0.08f;
         if (!MoveAndCollide(0f, velocity_y))
         {
             if (velocity_y > 0f && Input.GetKey(Key.W))
@@ -71,7 +71,7 @@ public class HumanPlayer : Player
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;
 
-            bullet.x_speed = 1.4f * direction.x;
+            bullet.x_speed = 2.4f * direction.x;
             //bullet.y_speed = 1.4f * direction.y;
             ammo--;
         }

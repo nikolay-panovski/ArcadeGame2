@@ -13,6 +13,6 @@ public class PickupCoin : AnimationSprite
 
     private void Update()
     {
-        //Move(-speed, 0);
+        Move(-speed, 0);
     }
 }

@@ -664,10 +664,17 @@ namespace GXPEngine
 		/// The type must inherit from GameObject.
 		/// </summary>
 		/// <returns>All descendants of the given type.</returns>
-		public T[] FindObjectsOfType<T>() where T:GameObject {
+		/*public T[] FindObjectsOfType<T>() where T:GameObject {
 			List<T> results = new List<T>();
 			FindObjectsOfType<T>(results);
 			return results.ToArray();
+		}*/
+
+		public List<T> FindObjectsOfType<T>() where T : GameObject
+		{
+			List<T> results = new List<T>();
+			FindObjectsOfType<T>(results);
+			return results;
 		}
 
 		private void FindObjectsOfType<T>(List<T> results) where T:GameObject {
