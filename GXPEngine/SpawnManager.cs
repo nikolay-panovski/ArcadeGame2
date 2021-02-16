@@ -20,24 +20,25 @@ public class SpawnManager : GameObject
     private void spawnPickups()
     {
         int rng = Utils.Random(0, MAX_RNG);
-        /*if (rng % 10 == 0)
+        if (rng % 10 == 0)
         {
             PickupShield shield = new PickupShield();
             parent.AddChild(shield);
-            shield.SetXY(this.x, Utils.Random(shield.height, game.height - MyGame.TILE_SIZE));
+            shield.SetXY(this.x, Utils.Random(shield.height, game.height / 2 - MyGame.TILE_SIZE));
         }
         else if (rng % 10 != 0 && rng % 5 == 0)
-        {*/
+        {
             PickupHeart drugs = new PickupHeart();
             parent.AddChild(drugs);
-            drugs.SetXY(this.x, game.height / 2 - MyGame.TILE_SIZE - 32);
-        /*}
-        else
+            drugs.SetXY(this.x, Utils.Random(drugs.height, game.height / 2 - MyGame.TILE_SIZE));
+        }
+        else if (rng % 10 != 0 && rng % 5 != 0 && rng % 3 == 0)
         {
-            AnimationSprite coin = new PickupCoin();
+            PickupCoin coin = new PickupCoin();
             parent.AddChild(coin);
-            coin.SetXY(this.x, Utils.Random(game.height - MyGame.TILE_SIZE - 32, game.height - MyGame.TILE_SIZE - 32));
-        }*/
+            coin.SetXY(this.x, Utils.Random(coin.height, game.height / 2 - MyGame.TILE_SIZE));
+        }
+        else return;
     }
 
     private void Update()

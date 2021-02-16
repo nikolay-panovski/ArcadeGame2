@@ -13,13 +13,17 @@ class Level : GameObject
     private SpawnManager spawner = new SpawnManager();
     private Camera viewport;
     private EnemyHuman[] enemies1;
+    //private PickupCoin debug_coin = new PickupCoin();
     public Level(string filename) : base()
     {
         viewport = new Camera(0, 0, (game as MyGame).width, (game as MyGame).height);
         viewport.x = (game as MyGame).width / 2;
         viewport.y = (game as MyGame).height / 2;   		// / 4 instead of / 2 due to the scale
-        viewport.scale = 0.5f;
+        //viewport.scale = 0.5f;
         AddChild(viewport);
+
+        //AddChild(debug_coin);
+        //debug_coin.SetXY(432, 352);
 
         AddChild(spawner);
         AddChild(bullet_handler);
@@ -46,28 +50,30 @@ class Level : GameObject
         {
             e.player1_ref = player1_ref;
             e.player2_ref = player2_ref;
+            e.bullet_handler = bullet_handler;
         }
     }
 
     private void updateCameraX()
     {
-        viewport.x += 0.4f;
+        //viewport.x += 0.2f;
     }
 
     private void Update()
     {
         updateCameraX();
-        
+
         // game over routine, adapt later if/when necessary
         // probably send player to hell I mean game over also for reaching an end
-        if (player1_ref.HP <= 0 || player2_ref.HP <= 0) (parent as MyGame).LoadGameOver();
+        //if (player1_ref.HP <= 0 || player2_ref.HP <= 0) (parent as MyGame).LoadGameOver();
 
-        foreach (EnemyHuman e in enemies1)
+        /*foreach (EnemyHuman e in enemies1)
         {
             if (e.x < viewport.x - MyGame.GAME_WIDTH)
             {
                 e.LateDestroy();
-                Console.WriteLine("enemy destroyed");
+                //Console.WriteLine("enemy destroyed");
             }
-        }
+        }*/
+    }
 }

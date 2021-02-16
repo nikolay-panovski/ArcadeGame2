@@ -18,15 +18,12 @@ public class RevolverBullet : Sprite
         y = newY;
     }
 
-    private void handleCollisions()     // what a surprise, OnCollision does not work!!
+    private void handleCollisions()
     {
         if (coll_info != null)
-        {
+        {  
+            if (coll_info.other is HumanPlayer || coll_info.other is AlienPlayer) (coll_info.other as Player).HP--;
             LateDestroy();
-            //if (coll_info.other is HumanPlayer == false) LateDestroy();
-            if (coll_info.other is AlienPlayer) LateDestroy();
-            //if (coll_info.other is HumanPlayer) (other as HumanPlayer).HP--;
-            //if (coll_info.other is AlienPlayer) (other as AlienPlayer).HP--;
         }
     }
 
