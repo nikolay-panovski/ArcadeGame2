@@ -23,13 +23,13 @@ public class AlienPlayer : Player
         velocity_y += 0.08f;     
         if (!MoveAndCollide(0f, velocity_y))
         {
-            if (velocity_y > 0f && Input.GetKey(Key.UP)) // if no velocity_y check here, 
-                                                         // does not clip through ceiling, sticks instead, clips on key release
+            if (velocity_y > 0f && Input.GetKey(Key.UP))
             {
                 velocity_y = -4f;
             }
             else velocity_y = 0f;        // player has landed
         }
+        if (Input.GetKeyDown(Key.UP)) velocity_y = -4f; // infinite jump, seems to not break more than usual...
     }
 
     //---------------------------------------------------------------

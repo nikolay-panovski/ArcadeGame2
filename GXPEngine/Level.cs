@@ -8,12 +8,12 @@ class Level : GameObject
     public HumanPlayer player1_ref { get; private set; }
     public AlienPlayer player2_ref { get; private set; }
     private DebugPlayer2 debug_ref;
-    private Pivot bullet_handler = new Pivot();       // who the hell calls an empty container/handler class PIVOT??
-    private Pivot acid_handler = new Pivot("acid");
+    public Pivot bullet_handler { get; private set; } = new Pivot();       // who the hell calls an empty container/handler class PIVOT??
+    public Pivot acid_handler { get; private set; } = new Pivot("acid");
+    private Pivot enemies_container = new Pivot();
     private SpawnManager spawner = new SpawnManager();
     private Camera viewport;
-    private List<EnemyGeneric> enemies1 = new List<EnemyGeneric>();     // altered FindObjectsOfType<> to return a List. dunno why it doesn't already do that.
-    private PickupCoin debug_coin = new PickupCoin();
+    private List<SpawnerEnemies> enemies1 = new List<SpawnerEnemies>();     // altered FindObjectsOfType<> to return a List. dunno why it doesn't already do that.
     public int level_score { get; set; }
     public int distance_score { get; set; }
     public int enemies_score { get; set; }
@@ -26,41 +26,49 @@ class Level : GameObject
         //viewport.scale = 0.5f;
         AddChild(viewport);
 
-        AddChild(debug_coin);
-        debug_coin.SetXY(432, 352);
-
         AddChild(spawner);
         AddChild(bullet_handler);
         AddChild(acid_handler);
         TiledLoader level_loader = new TiledLoader(filename);
         level_loader.rootObject = this;
 
-        level_loader.addColliders = true;
         level_loader.autoInstance = true;
-        level_loader.LoadObjectGroups();
+        //level_loader.addColliders = false;
+        level_loader.LoadObjectGroups(1);
+
+        level_loader.addColliders = true;  
+        level_loader.LoadObjectGroups(0);
         level_loader.LoadTileLayers();
 
         player1_ref = FindObjectOfType<HumanPlayer>();
         player2_ref = FindObjectOfType<AlienPlayer>();
         debug_ref = FindObjectOfType<DebugPlayer2>();
-        enemies1 = FindObjectsOfType<EnemyGeneric>();
+        enemies1 = FindObjectsOfType<SpawnerEnemies>();
 
         player1_ref.other_player = player2_ref;
         player2_ref.other_player = player1_ref;
         player1_ref.bullet_handler = bullet_handler;
         player2_ref.bullet_handler = acid_handler;
 
-        foreach (EnemyGeneric e in enemies1) 
+        /*foreach (EnemyGeneric e in enemies1) 
         {
             e.player1_ref = player1_ref;
             e.player2_ref = player2_ref;
             e.bullet_handler = bullet_handler;
+        }*/
+
+        foreach (SpawnerEnemies spawn in enemies1) 
+        {
+            spawn.player1_ref = player1_ref;
+            spawn.player2_ref = player2_ref;
+            spawn.parent = this;
+            spawn.RollRNG();
         }
     }
 
     private void updateCameraX()
     {
-        viewport.x += 0.3f;
+        //viewport.x += 0.3f;
         distance_score = ((int)viewport.x - (game as MyGame).width / 2) / 4;
     }
 

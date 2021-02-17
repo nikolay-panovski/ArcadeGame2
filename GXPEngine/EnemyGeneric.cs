@@ -18,7 +18,7 @@ public class EnemyGeneric : AnimationSprite
     protected Vector2 direction = new Vector2(0, 0);
     protected float cooldown;
 
-    public EnemyGeneric(string filename, int columns, int rows, TiledObject obj) : base(filename, columns, rows)
+    public EnemyGeneric(string filename, int columns, int rows) : base(filename, columns, rows, -1, false, true)
     {
         SetOrigin(width / 2, height / 2);
     }
@@ -76,6 +76,9 @@ public class EnemyGeneric : AnimationSprite
 
     private void Update()
     {
-        
+        /*foreach (Sprite other in GetCollisions())     // does not care
+        {
+            if (HitTest(other)) speed = -speed;
+        }*/
     }
 }

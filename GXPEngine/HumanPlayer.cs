@@ -86,9 +86,8 @@ public class HumanPlayer : Player
         handleCollisions();
         movementHandle();
         JumpAndGravityHandle();
-        //if (Input.GetKey(Key.W)) Console.WriteLine(velocity_y);
 
         // possible failsafe?
-        //if (x < MyGame.GAME_HEIGHT * 2) x = MyGame.GAME_HEIGHT * 2;
+        //if (y < MyGame.GAME_HEIGHT * 2) y = MyGame.GAME_HEIGHT * 2;
     }
 }

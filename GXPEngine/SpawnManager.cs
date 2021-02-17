@@ -4,10 +4,7 @@ using GXPEngine;
 
 public class SpawnManager : GameObject
 {
-    /* spawns: what - coins/hearts/shields/whatever (pickups);
-     *         when - define drop rates;
-     *         where - on random positions on the screen, probably limit to above floor+characters
-     *         what2 - structures with platforms
+    /* deprecate - object positions will be hardcode level design'd
      */
     private float spawn_timer = 0;
     private const int MAX_RNG = 256;
@@ -43,11 +40,11 @@ public class SpawnManager : GameObject
 
     private void Update()
     {
-        spawn_timer += Time.deltaTime / 1000f;
+        /*spawn_timer += Time.deltaTime / 1000f;
         if (spawn_timer >= 1.2f)
         {
             spawnPickups();
             spawn_timer = 0;
-        }
+        }*/
     }
 }

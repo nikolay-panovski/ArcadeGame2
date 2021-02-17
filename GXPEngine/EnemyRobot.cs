@@ -7,7 +7,7 @@ using TiledMapParser;
 public class EnemyRobot : EnemyGeneric
 {
     public AnimationSprite hurtbox { get; set; }
-    public EnemyRobot(string filename, int columns, int rows, TiledObject obj) : base(filename, columns, rows, obj)
+    public EnemyRobot() : base("Enemy Human.png", 1, 1)
     {
         //radius_dist = player1_ref.width;
         radius_dist = 64;   // ... 32 is not enough
@@ -20,31 +20,35 @@ public class EnemyRobot : EnemyGeneric
     private void meleeWithDistCooldown()      // for enemy robot melee
     {
         cooldown += Time.deltaTime / 1000f;
-        if (cooldown > 1 && (DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
+        if (cooldown > 1)
         {
-            if (DistanceTo(player1_ref) < DistanceTo(player2_ref)) closer_player = player1_ref;
-            else closer_player = player2_ref;
-            GetDirectionVector();
             if (hurtbox != null)
             {
                 hurtbox.Destroy();
                 RemoveChild(hurtbox);
                 hurtbox = null;
             }
-            else
+            if ((DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
             {
-                hurtbox = new AnimationSprite("pinky.png", 1, 1);
-                hurtbox.SetOrigin(hurtbox.width / 2, hurtbox.height / 2);
-                hurtbox.x += this.width * direction.x;
-                AddChild(hurtbox);
-                if (hurtbox.HitTest(closer_player))
+                if (DistanceTo(player1_ref) < DistanceTo(player2_ref)) closer_player = player1_ref;
+                else closer_player = player2_ref;
+                GetDirectionVector();
+
+                if (hurtbox == null)
                 {
-                    closer_player.HP--;
-                    Console.WriteLine("ow");
-                    closer_player.x += hurtbox.width * direction.x;     // rough but works
+                    hurtbox = new AnimationSprite("pinky.png", 1, 1);   // must have collider
+                    hurtbox.SetOrigin(hurtbox.width / 2, hurtbox.height / 2);
+                    hurtbox.x += this.width * direction.x;
+                    AddChild(hurtbox);
+                    if (hurtbox.HitTest(closer_player))
+                    {
+                        closer_player.HP--;
+                        Console.WriteLine("ow");
+                        closer_player.x += hurtbox.width * direction.x;     // rough but works
+                    }
                 }
+                cooldown = 0;
             }
-            cooldown = 0;
         }
 
         //else Move(-speed, 0);
