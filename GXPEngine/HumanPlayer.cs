@@ -22,7 +22,6 @@ public class HumanPlayer : Player
     private void movementHandle()
     {
         if (Input.GetKey(Key.A)) coll_info = MoveUntilCollision(-x_speed, 0);
-        // MoveAndCollide will work here with the updated resolveCollision, but the snapping from the sides still remains.
         if (Input.GetKey(Key.D)) coll_info = MoveUntilCollision(x_speed, 0);
 
     }
@@ -87,7 +86,15 @@ public class HumanPlayer : Player
         movementHandle();
         JumpAndGravityHandle();
 
-        // possible failsafe?
-        //if (y < MyGame.GAME_HEIGHT * 2) y = MyGame.GAME_HEIGHT * 2;
+        if (shield_timer > 0) shield_timer -= Time.deltaTime / 1000f;
+        if (shield_timer < 0)
+        {
+            shield_timer = 0;
+            RemoveChild(sprite_shielded);
+        }
+
+        // bounding / failsafe
+        if (y < 0) y = 0;
+        if (y > MyGame.GAME_HEIGHT * 2) y = MyGame.GAME_HEIGHT * 2;
     }
 }

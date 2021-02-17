@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using GXPEngine;
 
-public class SpawnManager : GameObject
+public class SpawnerPickups : GameObject
 {
     /* deprecate - object positions will be hardcode level design'd
      */
     private float spawn_timer = 0;
     private const int MAX_RNG = 256;
     private List<AnimationSprite> object_list = new List<AnimationSprite>();
-    public SpawnManager() : base()
+    public SpawnerPickups() : base()
     {
         SetXY(game.width + 200, 0);     // hide past the right side of the screen
     }
 
     private void spawnPickups()
     {
-        int rng = Utils.Random(0, MAX_RNG);
+        /*int rng = Utils.Random(0, MAX_RNG);
         if (rng % 10 == 0)
         {
             PickupShield shield = new PickupShield();
@@ -25,17 +25,17 @@ public class SpawnManager : GameObject
         }
         else if (rng % 10 != 0 && rng % 5 == 0)
         {
-            PickupHeart drugs = new PickupHeart();
+            PickupDrug drugs = new PickupDrug();
             parent.AddChild(drugs);
             drugs.SetXY(this.x, Utils.Random(drugs.height, game.height / 2 - MyGame.TILE_SIZE));
         }
         else if (rng % 10 != 0 && rng % 5 != 0 && rng % 3 == 0)
         {
-            PickupCoin coin = new PickupCoin();
+            PickupCell coin = new PickupCell();
             parent.AddChild(coin);
             coin.SetXY(this.x, Utils.Random(coin.height, game.height / 2 - MyGame.TILE_SIZE));
         }
-        else return;
+        else return;*/
     }
 
     private void Update()

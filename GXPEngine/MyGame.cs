@@ -21,15 +21,25 @@ public class MyGame : Game
 
 	public void LoadLevel()		// only call from MainMenu!!
     {
-		start_menu.LateDestroy();
-		RemoveChild(start_menu);
+		if (start_menu != null)
+		{
+			start_menu.LateDestroy();
+			RemoveChild(start_menu);
+			start_menu = null;
+		}
+		if (game_level != null)
+		{
+			game_level.LateDestroy();
+			RemoveChild(game_level);		// works, just absolutely no transitions
+			game_level = null;
+		}
 		game_level = new Level("test_map3.tmx");
 		AddChild(game_level);
 	}
 
 	public void LoadGameOver()  // only call from Level on death!!
 	{
-		high_score = game_level.player1_ref.HP;
+		high_score = game_level.level_score;
 		game_level.LateDestroy();
 		RemoveChild(game_level);
 		game_over = new GameOver();

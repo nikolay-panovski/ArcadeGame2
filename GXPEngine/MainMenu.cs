@@ -54,7 +54,8 @@ public class MainMenu : EasyDraw
                     (parent as MyGame).LoadLevel();
                     break;
                 case 1:
-                    System.Environment.Exit(-1);    // careful and check, this may not work outside of Debug!!
+                    game.Destroy();
+                    //System.Environment.Exit(-1);
                     break;
             }
         }

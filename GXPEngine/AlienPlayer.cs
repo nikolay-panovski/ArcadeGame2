@@ -72,7 +72,14 @@ public class AlienPlayer : Player
         GetDirectionVector();
         if (Input.GetKeyDown(Key.NUMPAD_4)) spawnBullet();
 
+        if (shield_timer > 0) shield_timer -= Time.deltaTime / 1000f;
+        if (shield_timer < 0) shield_timer = 0;
+
         movementHandle();
         JumpAndGravityHandle();
+
+        // bounding / failsafe
+        if (y < 0) y = 0;
+        if (y > MyGame.GAME_HEIGHT * 2) y = MyGame.GAME_HEIGHT * 2;
     }
 }

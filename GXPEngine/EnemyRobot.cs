@@ -7,7 +7,7 @@ using TiledMapParser;
 public class EnemyRobot : EnemyGeneric
 {
     public AnimationSprite hurtbox { get; set; }
-    public EnemyRobot() : base("Enemy Human.png", 1, 1)
+    public EnemyRobot() : base("Enemy Robot.png", 1, 1)
     {
         //radius_dist = player1_ref.width;
         radius_dist = 64;   // ... 32 is not enough
@@ -28,7 +28,7 @@ public class EnemyRobot : EnemyGeneric
                 RemoveChild(hurtbox);
                 hurtbox = null;
             }
-            if ((DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
+            else if ((DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
             {
                 if (DistanceTo(player1_ref) < DistanceTo(player2_ref)) closer_player = player1_ref;
                 else closer_player = player2_ref;
@@ -43,7 +43,7 @@ public class EnemyRobot : EnemyGeneric
                     if (hurtbox.HitTest(closer_player))
                     {
                         closer_player.HP--;
-                        Console.WriteLine("ow");
+                        //Console.WriteLine("ow");
                         closer_player.x += hurtbox.width * direction.x;     // rough but works
                     }
                 }
@@ -56,7 +56,8 @@ public class EnemyRobot : EnemyGeneric
 
     private void Update()
     {
+        HandleCollisions();
         meleeWithDistCooldown();
-        destroySelfOnNoHP();
+        DestroySelfOnNoHP();
     }
 }

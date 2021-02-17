@@ -14,6 +14,7 @@ public class EnemyGeneric : AnimationSprite
     public HumanPlayer player1_ref { get; set; }
     public AlienPlayer player2_ref { get; set; }
     protected Player closer_player;
+    protected Collision coll { get; set; }
     public Pivot bullet_handler { get; set; }
     protected Vector2 direction = new Vector2(0, 0);
     protected float cooldown;
@@ -37,7 +38,7 @@ public class EnemyGeneric : AnimationSprite
         }
     }
 
-    protected void spawnBullet()
+    private void spawnBullet()
     {
         RevolverBullet bullet = new RevolverBullet(this.x + this.width * direction.x, this.y + this.height * direction.y);
         bullet_handler.AddChild(bullet);
@@ -50,7 +51,7 @@ public class EnemyGeneric : AnimationSprite
         //bullet.y_speed = 1.4f * direction.y;
     }
 
-    protected void shootWithDistCooldown()
+    protected void ShootWithDistCooldown()
     {
         cooldown += Time.deltaTime / 1000f;
         if (cooldown > 2 && (DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
@@ -62,10 +63,18 @@ public class EnemyGeneric : AnimationSprite
             cooldown = 0;
         }
 
-        else if (cooldown < 1 || cooldown > 2) Move(-speed, 0);
+        else if (cooldown < 1 || cooldown > 2) coll = MoveUntilCollision(-speed, 0);
     }
 
-    protected void destroySelfOnNoHP()
+    protected void HandleCollisions()
+    {
+        if (coll != null)
+        {
+            if (coll.other is RevolverBullet == false) speed = -speed;  // looks meh but surprisingly works!
+        }
+    }
+
+    protected void DestroySelfOnNoHP()
     {
         if (HP <= 0)
         {
@@ -76,9 +85,6 @@ public class EnemyGeneric : AnimationSprite
 
     private void Update()
     {
-        /*foreach (Sprite other in GetCollisions())     // does not care
-        {
-            if (HitTest(other)) speed = -speed;
-        }*/
+
     }
 }

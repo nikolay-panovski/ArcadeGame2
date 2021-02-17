@@ -24,6 +24,7 @@ public class RevolverBullet : Sprite
         {  
             if (coll_info.other is HumanPlayer || coll_info.other is AlienPlayer) (coll_info.other as Player).HP--;
             if (coll_info.other is EnemyGeneric) (coll_info.other as EnemyGeneric).HP--;
+            if (coll_info.other is TileTarget) (coll_info.other as TileTarget).is_shot = true;
             LateDestroy();
         }
     }
