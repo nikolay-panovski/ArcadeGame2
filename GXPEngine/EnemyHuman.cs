@@ -21,5 +21,6 @@ public class EnemyHuman : EnemyGeneric
         HandleCollisions();
         ShootWithDistCooldown();
         DestroySelfOnNoHP();
+
     }
 }

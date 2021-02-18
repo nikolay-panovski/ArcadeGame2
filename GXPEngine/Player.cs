@@ -12,6 +12,7 @@ public class Player : AnimationSprite
     public int HP { get; set; }
     public int active_ID { get; set; }
     protected float shield_timer;
+    protected int i_frames;
     protected Sprite sprite_shielded = new Sprite("circle.png", false, false);
 
     protected float x_speed = 0.8f;
@@ -43,13 +44,15 @@ public class Player : AnimationSprite
     {
         // maybe useless check but not sure /shrug
         if (collider is RevolverBullet || collider is PickupAmmo || collider is PickupCell || collider is PickupDrug ||
-            collider is PickupShield || collider is TileButton || collider is TileTransmitter || collider is TileLaser)
+            collider is PickupShield || collider is TileButton || collider is TileTransmitter || collider is TileLaser ||
+            collider is TileWater || collider is TileAcid)
         {
             if (collider is RevolverBullet)
             {
                 collider.LateDestroy();
                 if (shield_timer <= 0) HP--;
-                Console.WriteLine(HP);
+                if (this is HumanPlayer) (parent as Level).game_hud.removeSpriteFromHuman();
+                if (this is AlienPlayer) (parent as Level).game_hud.removeSpriteFromAlien();
             }
             if (collider is PickupAmmo)
             {
@@ -66,7 +69,7 @@ public class Player : AnimationSprite
             if (collider is PickupDrug)
             {
                 (parent as Level).pickups_score += (collider as PickupDrug).points_value * (parent as Level).dist_multiplier;
-                (parent as Level).total_lives++;
+                (parent.parent as MyGame).total_lives++;
                 collider.LateDestroy();
             }
             if (collider is PickupShield)
@@ -83,7 +86,7 @@ public class Player : AnimationSprite
             }
             if (collider is TileTransmitter)
             {
-                if ((parent as Level).number_cells > 0)
+                if ((parent as Level).number_cells > 0 && (collider as TileTransmitter).is_charged == false)
                 {
                     (parent as Level).number_cells--;
                     (parent as Level).pickups_score += 100;
@@ -93,21 +96,52 @@ public class Player : AnimationSprite
             if (collider is TileLaser)      // add cooldown
             {
                 if ((collider as TileLaser).is_deact == false) {
-                    if (shield_timer <= 0) HP--;
-                    Console.WriteLine(HP);
+                    if (shield_timer <= 0 && i_frames == 0)
+                    {
+                        HP--;
+                        if (this is HumanPlayer) (parent as Level).game_hud.removeSpriteFromHuman();
+                        if (this is AlienPlayer) (parent as Level).game_hud.removeSpriteFromAlien();
+                    }
+                    i_frames = 15;
+                }
+            }
+            if (collider is TileWater)
+            {
+                if (this is AlienPlayer)
+                {
+                    velocity_y = -3f;
+                    if (i_frames == 0)
+                    {
+                        HP--;
+                        (parent as Level).game_hud.removeSpriteFromAlien();
+                    }
+                        i_frames = 8;
+                }
+            }
+            if (collider is TileAcid)
+            {
+                if (this is HumanPlayer)
+                {
+                    velocity_y = -3f;
+                    if (i_frames == 0)
+                    {
+                        HP--;
+                        (parent as Level).game_hud.removeSpriteFromHuman();
+                    }
+                    i_frames = 8;
                 }
             }
         }
 
-        else    // ELSE is not any object we want special collision with -> treat as walls etc.
+        //else  // ELSE is not any object we want special collision with -> treat as walls etc.
                 // seems to run for everything anyway
-                // ... but also only causes quicksand when it exists here?!??
-        {
+                // quicksand gone, otherwise water and acid won't work
+        //{
             if (deltaX < 0) subject.x = (collider.x + collider.width / 2 + subject.width / 2);  // refactored for origin at middle
             if (deltaX > 0) subject.x = (collider.x - collider.width / 2 - subject.width / 2);
             if (deltaY < 0) subject.y = (collider.y + collider.height / 2 + subject.height / 2) + 1;
             if (deltaY > 0) subject.y = (collider.y - collider.height / 2 - subject.height / 2) - 1;
-        }
+        //}
 
         if (collider is TileButton == false) active_ID = -1;    // takes collision with something else to reset, but shh
     }
@@ -119,7 +153,7 @@ public class Player : AnimationSprite
             if (coll_info.other is RevolverBullet)
             {
                 if (shield_timer <= 0) HP--;
-                Console.WriteLine(HP);
+                (parent as Level).game_hud.removeSpriteFromHuman();
                 coll_info.other.Destroy();
             }
             if (coll_info.other is PickupAmmo)
@@ -137,22 +171,23 @@ public class Player : AnimationSprite
             if (coll_info.other is PickupDrug)
             {
                 (parent as Level).pickups_score += (coll_info.other as PickupDrug).points_value * (parent as Level).dist_multiplier;
-                (parent as Level).total_lives++;
+                (parent.parent as MyGame).total_lives++;
                 coll_info.other.Destroy();
             }
             if (coll_info.other is PickupShield)
             {
                 (parent as Level).pickups_score += (coll_info.other as PickupShield).points_value * (parent as Level).dist_multiplier;
-                //(parent as Level).total_lives++;
                 shield_timer = 8;
                 AddChild(sprite_shielded);
                 coll_info.other.Destroy();
             }
-            if (coll_info.other is TileLaser)   // does not work? :zzz:
+            if (coll_info.other is TileLaser)   // does not work? ok, still solid, so... cool with me / i-frames if necessary
             {
                 if (shield_timer <= 0) HP--;
-                Console.WriteLine(HP);
+                if (this is HumanPlayer) (parent as Level).game_hud.removeSpriteFromHuman();
+                if (this is AlienPlayer) (parent as Level).game_hud.removeSpriteFromAlien();
             }
+            // don't access water and acid from the side, ever
         }
     }
 

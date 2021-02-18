@@ -35,7 +35,7 @@ public class HumanPlayer : Player
             {
                 velocity_y = -4f;
             }
-            else
+            else if (velocity_y != -3f)
             {
                 velocity_y = 0f;        // player has landed
             }
@@ -71,7 +71,7 @@ public class HumanPlayer : Player
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;
 
-            bullet.x_speed = 2.4f * direction.x;
+            bullet.x_speed = 2.8f * direction.x;
             //bullet.y_speed = 1.4f * direction.y;
             ammo--;
         }
@@ -92,6 +92,7 @@ public class HumanPlayer : Player
             shield_timer = 0;
             RemoveChild(sprite_shielded);
         }
+        if (i_frames > 0) i_frames--;
 
         // bounding / failsafe
         if (y < 0) y = 0;

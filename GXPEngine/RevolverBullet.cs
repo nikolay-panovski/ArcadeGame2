@@ -24,7 +24,11 @@ public class RevolverBullet : Sprite
         {  
             if (coll_info.other is HumanPlayer || coll_info.other is AlienPlayer) (coll_info.other as Player).HP--;
             if (coll_info.other is EnemyGeneric) (coll_info.other as EnemyGeneric).HP--;
-            if (coll_info.other is TileTarget) (coll_info.other as TileTarget).is_shot = true;
+            if (coll_info.other is TileTarget)
+            {
+                (coll_info.other as TileTarget).is_shot = true;
+                coll_info.other.Destroy();
+            }
             LateDestroy();
         }
     }
@@ -42,7 +46,7 @@ public class RevolverBullet : Sprite
         coll_info = MoveUntilCollision(x_speed, y_speed);
 
         // equivalent to alien player, required due to parents vs references
-        if ((parent as Pivot)._marker.Length > 0) ApplyGravityUntilFloor();
+        //if ((parent as Pivot)._marker.Length > 0) ApplyGravityUntilFloor();
 
         handleCollisions();
     }

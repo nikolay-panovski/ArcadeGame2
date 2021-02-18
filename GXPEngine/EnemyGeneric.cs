@@ -15,6 +15,7 @@ public class EnemyGeneric : AnimationSprite
     public AlienPlayer player2_ref { get; set; }
     protected Player closer_player;
     protected Collision coll { get; set; }
+    protected Sprite floor_check { get; set; }
     public Pivot bullet_handler { get; set; }
     protected Vector2 direction = new Vector2(0, 0);
     protected float cooldown;
@@ -22,6 +23,10 @@ public class EnemyGeneric : AnimationSprite
     public EnemyGeneric(string filename, int columns, int rows) : base(filename, columns, rows, -1, false, true)
     {
         SetOrigin(width / 2, height / 2);
+        floor_check = new Sprite("empty_10x10.png");
+        floor_check.SetOrigin(floor_check.width / 2, floor_check.height / 2);
+        AddChild(floor_check);
+        floor_check.SetXY(this.x - this.width / 2 - (floor_check.width / 2 + 3), this.y + this.height / 2 + (floor_check.height / 2 + 3));
     }
 
     protected void GetDirectionVector()   // seems to work fine
@@ -71,6 +76,16 @@ public class EnemyGeneric : AnimationSprite
         if (coll != null)
         {
             if (coll.other is RevolverBullet == false) speed = -speed;  // looks meh but surprisingly works!
+        }
+
+        //Console.WriteLine(floor_check.GetCollisions().Length);
+        if (floor_check.GetCollisions().Length == 0)
+        {
+            
+            speed = -speed;
+            //if (speed > 0) floor_check.x = this.width / 2 + floor_check.width / 2;
+            //else floor_check.x = - this.width / 2 - floor_check.width / 2;
+            
         }
     }
 

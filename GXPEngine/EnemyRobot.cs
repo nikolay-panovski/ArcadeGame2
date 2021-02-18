@@ -51,7 +51,7 @@ public class EnemyRobot : EnemyGeneric
             }
         }
 
-        //else Move(-speed, 0);
+        else Move(-speed, 0);
     }
 
     private void Update()

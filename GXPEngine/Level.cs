@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using GXPEngine;
 using TiledMapParser;
 
-class Level : GameObject
+public class Level : GameObject
 {
     public HumanPlayer player1_ref { get; private set; }
     public AlienPlayer player2_ref { get; private set; }
     public Pivot bullet_handler { get; private set; } = new Pivot();       // who the hell calls an empty container/handler class PIVOT??
     public Pivot acid_handler { get; private set; } = new Pivot("acid");
     public Camera viewport { get; }
+    public HUD game_hud { get; private set; } = new HUD();
     //------------------------------------
     //          OBJECT LISTS
     //------------------------------------
@@ -49,9 +50,9 @@ class Level : GameObject
     public Level(string filename) : base()
     {
         viewport = new Camera(0, 0, (game as MyGame).width, (game as MyGame).height);
-        viewport.x = (game as MyGame).width / 2;
-        viewport.y = (game as MyGame).height / 2;   		// / 4 instead of / 2 due to the scale
-        //viewport.scale = 0.5f;
+        viewport.x = (game as MyGame).width / 4;
+        viewport.y = (game as MyGame).height / 4;   		// / 4 instead of / 2 due to the scale
+        viewport.scale = 0.5f;
         AddChild(viewport);
 
         AddChild(bullet_handler);
@@ -69,6 +70,11 @@ class Level : GameObject
         level_width = level_loader.map.Width * level_loader.map.TileWidth;
         level_height = level_loader.map.Height * level_loader.map.TileHeight;
 
+        AddChild(game_hud);
+
+        //----------------------------------------------------
+        //          FIND OBJECTS AND SET REFERENCES
+        //----------------------------------------------------
         player1_ref = FindObjectOfType<HumanPlayer>();
         player2_ref = FindObjectOfType<AlienPlayer>();
 
@@ -83,14 +89,16 @@ class Level : GameObject
         player1_ref.bullet_handler = bullet_handler;
         player2_ref.bullet_handler = acid_handler;
 
+        game_hud.player1_ref = player1_ref;
+        game_hud.player2_ref = player2_ref;
+        game_hud.SetInitSprites();
+
         foreach (SpawnerEnemies spawn in enemies1) 
         {
             spawn.player1_ref = player1_ref;
             spawn.player2_ref = player2_ref;
             spawn.parent = this;
         }
-
-        total_lives = 5;        // 5 shared lives as per original idea
     }
 
     private void triggerSpawners()
@@ -156,11 +164,6 @@ class Level : GameObject
                         d.openDoor();
                         d.is_open = true;
                     }
-                    /*else
-                    {
-                        d.closeDoor();
-                        d.is_open = false;
-                    }*/
                 }
             }
 
@@ -173,26 +176,28 @@ class Level : GameObject
                         l.deactivateLaser();
                         l.is_deact = true;
                     }
-                    /*else
-                    {
-                        l.activateLaser();
-                        l.is_deact = false;
-                    }*/
                 }
             }
         }
 
         else
         {
+
             foreach (TileDoor d in doors)
             {
-                d.closeDoor();
-                d.is_open = false;
+                if (d.open_locked == false)
+                {
+                    d.closeDoor();
+                    d.is_open = false;
+                }
             }
             foreach (TileLaser l in lasers)
             {
-                l.activateLaser();
-                l.is_deact = false;
+                if (l.deact_locked == false)
+                {
+                    l.activateLaser();
+                    l.is_deact = false;
+                }
             }
         }
     }
@@ -210,7 +215,7 @@ class Level : GameObject
         else dist_multiplier = 3;
     }
 
-    private void destroyOutOfBounds()
+    private void destroyOutOfBounds()   // this probably destroys only spawners and not enemies anymore, but screw it
     {
         for (int e = enemies1.Count - 1; e >= 0; e--)
         {
@@ -218,7 +223,6 @@ class Level : GameObject
             {
                 enemies1[e].LateDestroy();
                 enemies1.Remove(enemies1[e]);
-                Console.WriteLine("enemy destroyed");
             }
         }
     }
@@ -228,21 +232,25 @@ class Level : GameObject
         updateCameraX();
         triggerSpawners();
 
-        checkActiveTransmitters();
         checkActiveButtons();
+        checkActiveTransmitters();
         checkShotTargets();
 
         level_score = distance_score + enemies_score + pickups_score;
-        //Console.WriteLine(level_score);
+        Console.WriteLine(level_score);
 
         // game over routine, adapt later if/when necessary
         // probably send player to hell I mean game over also for reaching an end
-        if ((player1_ref.HP <= 0 || player2_ref.HP <= 0) && total_lives > 0)
+        if ((player1_ref.HP <= 0 || player2_ref.HP <= 0) && (parent as MyGame).total_lives > 0)
         {
-            total_lives--;
+            (parent as MyGame).total_lives--;
             (parent as MyGame).LoadLevel();
         }
-        else if (total_lives < 0) (parent as MyGame).LoadGameOver();
+        else if ((parent as MyGame).total_lives <= 0)
+        {
+            (parent as MyGame).high_score = level_score;        // still 0 at here somehow
+            (parent as MyGame).LoadGameOver();
+        }
 
         setDistMultiplier();
 

@@ -1,24 +1,31 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Text;
 using GXPEngine;
 
 public class MainMenu : EasyDraw
 {
-    private Font font;      // insert font here + include font in files
-    private const int FONT_SIZE = 18;
+    private const int FONT_SIZE = 22;
     private const int OPTIONS_X = MyGame.GAME_WIDTH;
     private string[] options = new string[2];
     private Sprite selector = new Sprite("menu_arrow.png", false, false);
     private int selector_position = 0;
     private int y_position;
+    PrivateFontCollection custom_font = new PrivateFontCollection();
+    FontFamily[] family;
+    private string font_name = "";
     public MainMenu() : base(MyGame.GAME_WIDTH * 2, MyGame.GAME_HEIGHT * 2, false)
     {
         options[0] = "START GAME";
         options[1] = "QUIT";
 
+        // CUSTOM FONT SECTION - also apply to HUD
+        custom_font.AddFontFile("spaceranger.ttf");
+        family = custom_font.Families;
+        if (family.Length > 0) font_name = family[0].Name;
+        TextFont(font_name, FONT_SIZE);
+
         y_position = game.height / 2 - (options.Length - 1) * FONT_SIZE * 2;
-        //TextFont("fontnamehere.file", FONT_SIZE);
-        TextSize(FONT_SIZE);
         for (int n = 0; n < options.Length; n++)
         {
             Text(options[n], game.width / 2, y_position + n * FONT_SIZE * 4);
@@ -44,7 +51,7 @@ public class MainMenu : EasyDraw
         if (selector_position < 0) selector_position = options.Length - 1;
         if (selector_position > options.Length - 1) selector_position = 0;
 
-        selector.y = y_position + selector_position * FONT_SIZE * 4 - FONT_SIZE * 2;
+        selector.y = y_position + selector_position * FONT_SIZE * 4 - FONT_SIZE * 1.5f;
 
         if (Input.GetKeyDown(Key.G) || Input.GetKeyDown(Key.NUMPAD_1))
         {

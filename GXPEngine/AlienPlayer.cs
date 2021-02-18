@@ -27,7 +27,7 @@ public class AlienPlayer : Player
             {
                 velocity_y = -4f;
             }
-            else velocity_y = 0f;        // player has landed
+            else if (velocity_y != -3f) velocity_y = 0f;        // player has landed + hack for water/acid
         }
         if (Input.GetKeyDown(Key.UP)) velocity_y = -4f; // infinite jump, seems to not break more than usual...
     }
@@ -59,7 +59,7 @@ public class AlienPlayer : Player
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;
 
-            bullet.x_speed = 1.6f * direction.x;        // smaller than usual bullet speed because tree
+            bullet.x_speed = 1.4f * direction.x;        // smaller than usual bullet speed because tree
             //bullet.y_speed = 1.4f * direction.y;
             bullet_cooldown = 2;
         }
@@ -70,10 +70,11 @@ public class AlienPlayer : Player
         bullet_cooldown -= Time.deltaTime / 1000f;
         if (bullet_cooldown < 0) bullet_cooldown = 0;
         GetDirectionVector();
-        if (Input.GetKeyDown(Key.NUMPAD_4)) spawnBullet();
+        if (Input.GetKeyDown(Key.NUMPAD_1)) spawnBullet();
 
         if (shield_timer > 0) shield_timer -= Time.deltaTime / 1000f;
         if (shield_timer < 0) shield_timer = 0;
+        if (i_frames > 0) i_frames--;
 
         movementHandle();
         JumpAndGravityHandle();
