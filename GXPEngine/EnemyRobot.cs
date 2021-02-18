@@ -40,10 +40,10 @@ public class EnemyRobot : EnemyGeneric
                     hurtbox.SetOrigin(hurtbox.width / 2, hurtbox.height / 2);
                     hurtbox.x += this.width * direction.x;
                     AddChild(hurtbox);
+                    new Sound("Enemy_Action_Damage.wav").Play();
                     if (hurtbox.HitTest(closer_player))
                     {
                         closer_player.HP--;
-                        //Console.WriteLine("ow");
                         closer_player.x += hurtbox.width * direction.x;     // rough but works
                     }
                 }

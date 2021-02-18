@@ -21,12 +21,33 @@ public class RevolverBullet : Sprite
     private void handleCollisions()
     {
         if (coll_info != null)
-        {  
-            if (coll_info.other is HumanPlayer || coll_info.other is AlienPlayer) (coll_info.other as Player).HP--;
-            if (coll_info.other is EnemyGeneric) (coll_info.other as EnemyGeneric).HP--;
+        {
+            if (coll_info.other is HumanPlayer)
+            {
+                if ((coll_info.other as HumanPlayer).shield_timer <= 0)
+                {
+                    (coll_info.other as HumanPlayer).HP--;
+                    (parent.parent as Level).game_hud.RemoveSpriteFromHuman();
+                }
+            }
+            if (coll_info.other is AlienPlayer)
+            {
+                if ((coll_info.other as AlienPlayer).shield_timer <= 0)
+                {
+                    (coll_info.other as AlienPlayer).HP--;
+                    new Sound("Alien_Action_Damage.wav").Play();
+                    (parent.parent as Level).game_hud.RemoveSpriteFromAlien();
+                }
+            }
+            if (coll_info.other is EnemyGeneric)
+            {
+                (coll_info.other as EnemyGeneric).HP--;
+                new Sound("Enemy_Action_Damage.wav").Play();
+            }
             if (coll_info.other is TileTarget)
             {
                 (coll_info.other as TileTarget).is_shot = true;
+                new Sound("Global_Action_Laser_Deactivation.wav").Play();
                 coll_info.other.Destroy();
             }
             LateDestroy();

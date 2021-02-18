@@ -17,7 +17,7 @@ public class TileLaser : AnimationSprite        // <--> door
     {
         if (is_deact == false)
         {
-            y -= 4 * MyGame.TILE_SIZE;  // 3 is insufficient, collision still happens, thanks to those +-1s
+            y -= 44 * MyGame.TILE_SIZE;
         }
     }
 
@@ -25,7 +25,7 @@ public class TileLaser : AnimationSprite        // <--> door
     {
         if (is_deact == true)
         {
-            y += 4 * MyGame.TILE_SIZE;
+            y += 44 * MyGame.TILE_SIZE;
         }
     }
 

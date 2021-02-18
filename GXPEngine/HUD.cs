@@ -24,8 +24,8 @@ public class HUD : EasyDraw
 
     public HUD() : base(MyGame.GAME_WIDTH * 2, MyGame.GAME_HEIGHT * 2, false)
     {
-        scale = 0.5f;
         text_elements = new EasyDraw(this.width, this.height, false);
+        scale = 0.5f;
         AddChild(static_elements);
         AddChild(text_elements);
         
@@ -57,7 +57,7 @@ public class HUD : EasyDraw
         AddChild(cooldown_bullet);
     }
 
-    public void removeSpriteFromHuman()
+    public void RemoveSpriteFromHuman()
     {
         if (red_hearts.Count > 0)
         {
@@ -66,12 +66,30 @@ public class HUD : EasyDraw
         }
     }
 
-    public void removeSpriteFromAlien()
+    public void RemoveSpriteFromAlien()
     {
         if (blue_hearts.Count > 0)
         {
             RemoveChild(blue_hearts[blue_hearts.Count - 1]);
             blue_hearts.RemoveAt(blue_hearts.Count - 1);
+        }
+    }
+
+    public void AddCellSprite()
+    {
+        Sprite newCell = new Sprite("HUD_cell.png", false, false);
+        cells.Add(newCell);
+        newCell.x = game.width - FONT_SIZE * 4 - (cells.Count - 1) * MyGame.TILE_SIZE * 3;
+        newCell.y = FONT_SIZE * 2;
+        AddChild(newCell);
+    }
+
+    public void RemoveCellSprite()
+    {
+        if (cells.Count > 0)
+        {
+            RemoveChild(cells[cells.Count - 1]);
+            cells.RemoveAt(cells.Count - 1);
         }
     }
 
@@ -83,13 +101,19 @@ public class HUD : EasyDraw
         {
             TextSize(FONT_SIZE);
             text_elements.Text("SCORE: " + (parent as Level).level_score /*+ "M"*/, FONT_SIZE, FONT_SIZE * 4);
-            text_elements.Text(player1_ref.ammo.ToString(), game.width * 0.19f * scale, game.height * 0.98f * scale);
+            text_elements.Text(player1_ref.ammo.ToString(), game.width * 0.18f, game.height * 0.98f);
             Stroke(Color.Black);    // does not care about size or stroke??
-            if (parent.parent != null) text_elements.Text((parent.parent as MyGame).total_lives.ToString(),
-                                                           game.width * 0.49f + FONT_SIZE / 5,
-                                                           game.height * 0.92f + FONT_SIZE / 5);
+            if (parent.parent != null)
+            {
+                text_elements.Text((parent.parent as MyGame).total_lives.ToString(),
+                                   game.width * 0.48f + FONT_SIZE / 4,
+                                   game.height * 0.9f + FONT_SIZE / 4);
+            }
         }
 
-        x += 0.5f;  // increment by the same as viewport
+        if (player2_ref.bullet_cooldown == 0) cooldown_bullet.alpha = 1;
+        else cooldown_bullet.alpha = 0;
+
+        //if ((parent as Level).viewport.x < (parent as Level).level_width - (game as MyGame).width / 4) x += 0.5f;  // increment by the same as viewport
     }
 }

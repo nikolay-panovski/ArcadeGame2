@@ -114,7 +114,6 @@
     <Compile Include="TileButton.cs" />
     <Compile Include="PickupCell.cs" />
     <Compile Include="PickupAmmo.cs" />
-    <Compile Include="RevolverEnemyBullet.cs" />
     <Compile Include="SpawnerEnemies.cs" />
     <Compile Include="SpawnerPickups.cs" />
     <Compile Include="PickupDrug.cs" />

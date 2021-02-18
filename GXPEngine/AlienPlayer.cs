@@ -5,7 +5,7 @@ using TiledMapParser;
 public class AlienPlayer : Player
 {
     public HumanPlayer other_player { get; set; }
-    private float bullet_cooldown = 0;        // for shooting
+    public float bullet_cooldown { get; set; } = 0;        // for shooting
 
     public AlienPlayer(string filename, int columns, int rows, TiledObject obj) : base(filename, columns, rows, obj)
     {
@@ -14,8 +14,24 @@ public class AlienPlayer : Player
 
     private void movementHandle()
     {
-        if (Input.GetKey(Key.LEFT) ) coll_info = MoveUntilCollision(-x_speed, 0);
-        if (Input.GetKey(Key.RIGHT)) coll_info = MoveUntilCollision(x_speed, 0);
+        if (Input.GetKey(Key.LEFT))
+        {
+            coll_info = MoveUntilCollision(-x_speed, 0);
+            if (!Input.GetKey(Key.UP))
+            {
+                SetCycle(0, 3, 20);
+                Animate();
+            }
+        }
+        if (Input.GetKey(Key.RIGHT))
+        {
+            coll_info = MoveUntilCollision(x_speed, 0);
+            if (!Input.GetKey(Key.UP))
+            {
+                SetCycle(0, 3, 20);
+                Animate();
+            }
+        }
     }
 
     private void JumpAndGravityHandle()
@@ -23,9 +39,16 @@ public class AlienPlayer : Player
         velocity_y += 0.08f;     
         if (!MoveAndCollide(0f, velocity_y))
         {
+            if (velocity_y < 0f)
+            {
+                SetCycle(4, 1);
+                Animate();
+            }
             if (velocity_y > 0f && Input.GetKey(Key.UP))
             {
                 velocity_y = -4f;
+                SetCycle(3, 1);
+                Animate();
             }
             else if (velocity_y != -3f) velocity_y = 0f;        // player has landed + hack for water/acid
         }
@@ -55,6 +78,7 @@ public class AlienPlayer : Player
         {
             RevolverBullet bullet = new RevolverBullet(this.x + this.width * direction.x, this.y + this.height * direction.y);
             bullet_handler.AddChild(bullet);
+            new Sound("Alien_Action_Acid_Shot.wav").Play();
 
             if (direction.x == 1) bullet.rotation = 0;
             else if (direction.x == -1) bullet.rotation = 180;

@@ -21,8 +21,24 @@ public class HumanPlayer : Player
     //---------------------------------------------------------------
     private void movementHandle()
     {
-        if (Input.GetKey(Key.A)) coll_info = MoveUntilCollision(-x_speed, 0);
-        if (Input.GetKey(Key.D)) coll_info = MoveUntilCollision(x_speed, 0);
+        if (Input.GetKey(Key.A))
+        {
+            coll_info = MoveUntilCollision(-x_speed, 0);
+            if (!Input.GetKey(Key.W))
+            {
+                SetCycle(0, 6, 10);
+                Animate();
+            }
+        }
+        if (Input.GetKey(Key.D))
+        {
+            coll_info = MoveUntilCollision(x_speed, 0);
+            if (!Input.GetKey(Key.W))
+            {
+                SetCycle(0, 6, 10);
+                Animate();
+            }
+        }
 
     }
 
@@ -31,14 +47,22 @@ public class HumanPlayer : Player
         velocity_y += 0.08f;
         if (!MoveAndCollide(0f, velocity_y))
         {
+            if (velocity_y < 0f)
+            {
+                SetCycle(13, 1);
+                Animate();
+            }
             if (velocity_y > 0f && Input.GetKey(Key.W))
             {
                 velocity_y = -4f;
+                SetCycle(12, 1);
+                Animate();
             }
             else if (velocity_y != -3f)
             {
                 velocity_y = 0f;        // player has landed
             }
+            
 
         }
     }
@@ -80,7 +104,15 @@ public class HumanPlayer : Player
     private void Update()
     {
         GetDirectionVector();
-        if (Input.GetKeyDown(Key.G)) spawnBullet();
+        if (Input.GetKeyDown(Key.G))
+        {
+            SetCycle(6, 6, 10);
+            spawnBullet();
+            //for (int i = 0; i < frameCount * 10; i++)
+            //{
+                Animate();
+            //} 
+        }
 
         handleCollisions();
         movementHandle();

@@ -206,6 +206,16 @@ namespace GXPEngine
 			SetFrame(frame);
 		}
 
+		private void NextFrameWithoutLoop()
+		{
+			int frame = _currentFrame + 1;
+			if (frame > _frames + _startFrame)
+			{
+				frame = _frames + _startFrame;
+			}
+			SetFrame(frame);
+		}
+
 		//------------------------------------------------------------------------------------------------------------------------
 		//														SetCycle()
 		//------------------------------------------------------------------------------------------------------------------------
@@ -258,7 +268,17 @@ namespace GXPEngine
 				_animationFrameCounter=0;
 			}
 		}
-		
+
+		public void AnimateWithoutLoop()
+		{
+			_animationFrameCounter++;
+			if (_animationFrameCounter >= _animationDelay)
+			{
+				NextFrameWithoutLoop();
+				_animationFrameCounter = 0;
+			}
+		}
+
 		//------------------------------------------------------------------------------------------------------------------------
 		//														currentFrame
 		//------------------------------------------------------------------------------------------------------------------------

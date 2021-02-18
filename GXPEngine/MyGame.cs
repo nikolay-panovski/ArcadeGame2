@@ -11,7 +11,7 @@ public class MyGame : Game
 	public Level game_level { get; set; }
 	private GameOver game_over;
 	public int high_score { get; set; }
-	public int total_lives { get; set; } = 2;
+	public int total_lives { get; set; } = 2;	// set to 5 if original game idea
 	public MyGame() : base(GAME_WIDTH * 2, GAME_HEIGHT * 2, false)		// 576x432 aka 36x27 blocks
 																		// 1152x864 for PC purposes
 	{

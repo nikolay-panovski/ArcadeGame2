@@ -15,10 +15,11 @@ public class Level : GameObject
     //          OBJECT LISTS
     //------------------------------------
     private List<SpawnerEnemies> enemies1 = new List<SpawnerEnemies>();     // altered FindObjectsOfType<> to return a List. dunno why it doesn't already do that.
-    private List<TileTransmitter> charged = new List<TileTransmitter>();
+    public List<TileTransmitter> charged { get; set; } = new List<TileTransmitter>();
     private List<TileDoor> doors = new List<TileDoor>();
     private List<TileTarget> targets = new List<TileTarget>();
     private List<TileLaser> lasers = new List<TileLaser>();
+    public List<TileButton> buttons { get; set; } = new List<TileButton>();
 
 
     //------------------------------------
@@ -70,7 +71,7 @@ public class Level : GameObject
         level_width = level_loader.map.Width * level_loader.map.TileWidth;
         level_height = level_loader.map.Height * level_loader.map.TileHeight;
 
-        AddChild(game_hud);
+
 
         //----------------------------------------------------
         //          FIND OBJECTS AND SET REFERENCES
@@ -83,15 +84,12 @@ public class Level : GameObject
         doors = FindObjectsOfType<TileDoor>();
         targets = FindObjectsOfType<TileTarget>();
         lasers = FindObjectsOfType<TileLaser>();
+        buttons = FindObjectsOfType<TileButton>();
 
         player1_ref.other_player = player2_ref;
         player2_ref.other_player = player1_ref;
         player1_ref.bullet_handler = bullet_handler;
         player2_ref.bullet_handler = acid_handler;
-
-        game_hud.player1_ref = player1_ref;
-        game_hud.player2_ref = player2_ref;
-        game_hud.SetInitSprites();
 
         foreach (SpawnerEnemies spawn in enemies1) 
         {
@@ -99,6 +97,11 @@ public class Level : GameObject
             spawn.player2_ref = player2_ref;
             spawn.parent = this;
         }
+
+        AddChild(game_hud);
+        game_hud.player1_ref = player1_ref;
+        game_hud.player2_ref = player2_ref;
+        game_hud.SetInitSprites();
     }
 
     private void triggerSpawners()
@@ -204,8 +207,8 @@ public class Level : GameObject
 
     private void updateCameraX()
     {
-        viewport.x += 0.5f;
-        distance_score = ((int)viewport.x - (game as MyGame).width / 2) / 4;
+        //if (viewport.x < level_width - (game as MyGame).width / 4) viewport.x += 0.5f;
+        distance_score = ((int)viewport.x - (game as MyGame).width / 4) / 4;
     }
 
     private void setDistMultiplier()
@@ -237,18 +240,18 @@ public class Level : GameObject
         checkShotTargets();
 
         level_score = distance_score + enemies_score + pickups_score;
-        Console.WriteLine(level_score);
 
         // game over routine, adapt later if/when necessary
         // probably send player to hell I mean game over also for reaching an end
         if ((player1_ref.HP <= 0 || player2_ref.HP <= 0) && (parent as MyGame).total_lives > 0)
         {
             (parent as MyGame).total_lives--;
-            (parent as MyGame).LoadLevel();
+            new Sound("Global_Action_Life_Lost.wav").Play();
+            if ((parent as MyGame).total_lives > 0) (parent as MyGame).LoadLevel();
         }
         else if ((parent as MyGame).total_lives <= 0)
         {
-            (parent as MyGame).high_score = level_score;        // still 0 at here somehow
+            (parent as MyGame).high_score = level_score;
             (parent as MyGame).LoadGameOver();
         }
 

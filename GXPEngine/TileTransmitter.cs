@@ -14,6 +14,6 @@ public class TileTransmitter : AnimationSprite      // <--> target
 
     private void Update()
     {
-        
+
     }
 }

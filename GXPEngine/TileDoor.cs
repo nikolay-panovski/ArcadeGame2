@@ -17,7 +17,7 @@ public class TileDoor : AnimationSprite         // <--> laser
     {
         if (is_open == false)
         {
-            y -= 4 * MyGame.TILE_SIZE;  // 3 is insufficient, collision still happens, thanks to those +-1s
+            y -= 44 * MyGame.TILE_SIZE; // for some nice out of bounds
         }
     }
 
@@ -25,7 +25,7 @@ public class TileDoor : AnimationSprite         // <--> laser
     {
         if (is_open == true)
         {
-            y += 4 * MyGame.TILE_SIZE;
+            y += 44 * MyGame.TILE_SIZE;
         }
     }
 
