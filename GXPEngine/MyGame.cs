@@ -11,12 +11,18 @@ public class MyGame : Game
 	public Level game_level { get; set; }
 	private GameOver game_over;
 	public int high_score { get; set; }
-	public int total_lives { get; set; } = 2;	// set to 5 if original game idea
+	public int total_lives { get; set; } = 5;   // set to 5 if original game idea
+
+	public Sound level_track;
+
+	//private Sound main_menu_track = new Sound("Song_Main_Menu.mp3", true);
+	//private Sound level_track = new Sound("Song_Level_Track.mp3", false);
 	public MyGame() : base(GAME_WIDTH * 2, GAME_HEIGHT * 2, false)		// 576x432 aka 36x27 blocks
 																		// 1152x864 for PC purposes
 	{
 		start_menu = new MainMenu();
 		AddChild(start_menu);
+		//main_menu_track.Play();
 	}
 
 	public void LoadLevel()		// only call from MainMenu!!
@@ -33,8 +39,13 @@ public class MyGame : Game
 			RemoveChild(game_level);		// works, just absolutely no transitions
 			game_level = null;
 		}
-		game_level = new Level("test_map3.tmx");
+		game_level = new Level("World.tmx");
 		AddChild(game_level);
+		if (level_track == null)
+		{
+			level_track = new Sound("Song_Level_Track.mp3", true);
+			level_track.Play(false, 0);
+		}
 	}
 
 	public void LoadGameOver()  // only call from Level on death!!

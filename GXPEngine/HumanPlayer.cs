@@ -14,6 +14,7 @@ public class HumanPlayer : Player
     {
         HP = 3;
         ammo = 12;
+        direction.x = 1;
     }
 
     //---------------------------------------------------------------

@@ -74,7 +74,7 @@ namespace GXPEngine
 				if (j >= colliderList.Count) continue; //fix for removal in loop
 				GameObject other = colliderList[j];
 				if (gameObject != other) {
-					if (/*Mathf.Abs(gameObject.x - other.x) < 128f &&*/ gameObject.HitTest(other) ) {	// optimisation - cancelled
+					if (Mathf.Abs(gameObject.x - other.x) < 1024f && gameObject.HitTest(other) ) {	// optimisation - cancelled
 						list.Add(other);
 					}
 				}

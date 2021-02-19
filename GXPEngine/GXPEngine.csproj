@@ -105,6 +105,7 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="TileExit.cs" />
     <Compile Include="TileAcid.cs" />
     <Compile Include="TileWater.cs" />
     <Compile Include="TileLaser.cs" />

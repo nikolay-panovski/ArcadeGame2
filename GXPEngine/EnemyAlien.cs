@@ -6,7 +6,7 @@ using TiledMapParser;
 
 public class EnemyAlien : EnemyGeneric
 {
-    public EnemyAlien() : base("Enemy Alien.png", 1, 1)
+    public EnemyAlien() : base("enemy_alien_anim.png", 6, 2, 12)
     {
         radius_dist = 256;      // more?
         points_value = 50;

@@ -100,7 +100,7 @@ public class HUD : EasyDraw
         if (parent != null)
         {
             TextSize(FONT_SIZE);
-            text_elements.Text("SCORE: " + (parent as Level).level_score /*+ "M"*/, FONT_SIZE, FONT_SIZE * 4);
+            text_elements.Text("SCORE: " + (parent as Level).level_score, FONT_SIZE, FONT_SIZE * 4);
             text_elements.Text(player1_ref.ammo.ToString(), game.width * 0.18f, game.height * 0.98f);
             Stroke(Color.Black);    // does not care about size or stroke??
             if (parent.parent != null)
@@ -114,6 +114,6 @@ public class HUD : EasyDraw
         if (player2_ref.bullet_cooldown == 0) cooldown_bullet.alpha = 1;
         else cooldown_bullet.alpha = 0;
 
-        //if ((parent as Level).viewport.x < (parent as Level).level_width - (game as MyGame).width / 4) x += 0.5f;  // increment by the same as viewport
+        if ((parent as Level).viewport.x < (parent as Level).level_width - (game as MyGame).width / 4) x += 0.3f;  // increment by the same as viewport
     }
 }

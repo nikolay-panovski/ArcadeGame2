@@ -6,7 +6,7 @@ using TiledMapParser;
 
 public class EnemyHuman : EnemyGeneric
 {
-    public EnemyHuman() : base("Enemy Human.png", 1, 1)  // todo: animations
+    public EnemyHuman() : base("enemy_human_anim.png", 6, 2, 11)
     {
         radius_dist = 192;
         points_value = 50;

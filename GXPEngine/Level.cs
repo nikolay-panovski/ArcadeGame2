@@ -11,6 +11,9 @@ public class Level : GameObject
     public Pivot acid_handler { get; private set; } = new Pivot("acid");
     public Camera viewport { get; }
     public HUD game_hud { get; private set; } = new HUD();
+
+    private Sprite background = new Sprite("background_576_432.png", false, false);
+
     //------------------------------------
     //          OBJECT LISTS
     //------------------------------------
@@ -56,18 +59,23 @@ public class Level : GameObject
         viewport.scale = 0.5f;
         AddChild(viewport);
 
+        //background.scale = 2f;
+        AddChildAt(background, 0);
+
         AddChild(bullet_handler);
         AddChild(acid_handler);
         TiledLoader level_loader = new TiledLoader(filename);
         level_loader.rootObject = this;
 
         level_loader.autoInstance = true;
-        //level_loader.addColliders = false;
-        level_loader.LoadObjectGroups(1);   // manual type considered, no thanks, I assume Tiled wants its sprites anyway
+        level_loader.addColliders = false;
+        //level_loader.LoadImageLayers();
+        level_loader.LoadTileLayers(1, 2);  // 0 is turned off
 
-        level_loader.addColliders = true;  
-        level_loader.LoadObjectGroups(0);
-        level_loader.LoadTileLayers();
+        level_loader.addColliders = true;
+        level_loader.LoadObjectGroups(0);   // manual type considered, no thanks, I assume Tiled wants its sprites anyway
+        level_loader.LoadTileLayers(3);
+
         level_width = level_loader.map.Width * level_loader.map.TileWidth;
         level_height = level_loader.map.Height * level_loader.map.TileHeight;
 
@@ -207,7 +215,11 @@ public class Level : GameObject
 
     private void updateCameraX()
     {
-        //if (viewport.x < level_width - (game as MyGame).width / 4) viewport.x += 0.5f;
+        if (viewport.x < level_width - (game as MyGame).width / 4)
+        {
+            viewport.x += 0.3f;
+            background.x += 0.3f;
+        }
         distance_score = ((int)viewport.x - (game as MyGame).width / 4) / 4;
     }
 
@@ -230,6 +242,19 @@ public class Level : GameObject
         }
     }
 
+    private void resetLevelRoutine()
+    {
+        (parent as MyGame).total_lives--;
+        new Sound("Global_Action_Life_Lost.wav").Play();
+        if ((parent as MyGame).total_lives > 0) (parent as MyGame).LoadLevel();
+    }
+
+    public void GameOverRoutine()
+    {
+        (parent as MyGame).high_score = level_score;
+        (parent as MyGame).LoadGameOver();
+    }
+
     private void Update()
     {
         updateCameraX();
@@ -245,14 +270,11 @@ public class Level : GameObject
         // probably send player to hell I mean game over also for reaching an end
         if ((player1_ref.HP <= 0 || player2_ref.HP <= 0) && (parent as MyGame).total_lives > 0)
         {
-            (parent as MyGame).total_lives--;
-            new Sound("Global_Action_Life_Lost.wav").Play();
-            if ((parent as MyGame).total_lives > 0) (parent as MyGame).LoadLevel();
+            resetLevelRoutine();
         }
         else if ((parent as MyGame).total_lives <= 0)
         {
-            (parent as MyGame).high_score = level_score;
-            (parent as MyGame).LoadGameOver();
+            GameOverRoutine();
         }
 
         setDistMultiplier();

@@ -9,15 +9,21 @@ public class MainMenu : EasyDraw
     private const int OPTIONS_X = MyGame.GAME_WIDTH;
     private string[] options = new string[2];
     private Sprite selector = new Sprite("menu_arrow.png", false, false);
+    private Sprite logo = new Sprite("oo_sizeable.png", false, false);
     private int selector_position = 0;
     private int y_position;
     PrivateFontCollection custom_font = new PrivateFontCollection();
     FontFamily[] family;
     private string font_name = "";
+    public Sound main_menu_track;
+
     public MainMenu() : base(MyGame.GAME_WIDTH * 2, MyGame.GAME_HEIGHT * 2, false)
     {
         options[0] = "START GAME";
         options[1] = "QUIT";
+
+        main_menu_track = new Sound("Song_Main_Menu.mp3", true);
+        main_menu_track.Play(false, 0);
 
         // CUSTOM FONT SECTION - also apply to HUD
         custom_font.AddFontFile("spaceranger.ttf");
@@ -42,6 +48,20 @@ public class MainMenu : EasyDraw
         AddChild(selector);
         selector.x = OPTIONS_X - FONT_SIZE * 4;
         selector.y = y_position + selector_position * FONT_SIZE * 4 - FONT_SIZE * 2;
+
+        AddChild(logo);
+        logo.SetOrigin(logo.width / 2, logo.height / 2);
+        logo.x = OPTIONS_X;
+        logo.y = MyGame.GAME_HEIGHT / 3;
+    }
+
+    private void alphaFadeout()
+    {
+        if (alpha > 0.1f)
+        {
+            alpha -= 0.1f;
+            selector.alpha -= 0.1f;
+        }
     }
 
     private void Update()
@@ -58,7 +78,8 @@ public class MainMenu : EasyDraw
             switch(selector_position)
             {
                 case 0:
-                    (parent as MyGame).LoadLevel();
+                    /*if (alpha <= 0.1f)*/ (parent as MyGame).LoadLevel();
+                    //else alphaFadeout();
                     break;
                 case 1:
                     game.Destroy();

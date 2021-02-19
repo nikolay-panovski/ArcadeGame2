@@ -13,7 +13,7 @@ public class Player : AnimationSprite
     public int active_ID { get; set; }
     public float shield_timer { get; set; }
     protected int i_frames;
-    protected Sprite sprite_shielded = new Sprite("circle.png", false, false);
+    protected Sprite sprite_shielded = new Sprite("Energy Shield.png", false, false);
 
     protected float x_speed = 0.8f;
 
@@ -45,7 +45,7 @@ public class Player : AnimationSprite
         // maybe useless check but not sure /shrug
         if (collider is RevolverBullet || collider is PickupAmmo || collider is PickupCell || collider is PickupDrug ||
             collider is PickupShield || collider is TileButton || collider is TileTransmitter || collider is TileLaser ||
-            collider is TileWater || collider is TileAcid)
+            collider is TileWater || collider is TileAcid || collider is TileExit)
         {
             if (collider is RevolverBullet)
             {
@@ -123,6 +123,7 @@ public class Player : AnimationSprite
                         }
                     }
                     (collider as TileTransmitter).is_charged = true;
+                    new Sound("Global_Action_Energy_Cell.wav").Play();
                     (parent as Level).game_hud.RemoveCellSprite();
                     (parent as Level).number_cells--;
                     (parent as Level).pickups_score += 100;
@@ -175,6 +176,10 @@ public class Player : AnimationSprite
                     }
                     i_frames = 8;
                 }
+            }
+            if (collider is TileExit)
+            {
+                (parent as Level).GameOverRoutine();
             }
         }
 
@@ -263,6 +268,10 @@ public class Player : AnimationSprite
                 i_frames = 15;
             }
             // don't access water and acid from the side, ever
+            if (coll_info.other is TileExit)
+            {
+                (parent.parent as MyGame).LoadGameOver();
+            }
         }
     }
 

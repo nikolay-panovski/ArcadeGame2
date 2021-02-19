@@ -50,7 +50,7 @@ public class SpawnerEnemies : AnimationSprite
         e_human.player1_ref = (parent as Level).player1_ref;
         e_human.player2_ref = (parent as Level).player2_ref;
         e_human.bullet_handler = (parent as Level).bullet_handler;
-        parent.AddChildAt(e_human, 0);
+        parent.AddChildAt(e_human, 1);
         e_human.x = this.x;
         e_human.y = this.y;
     }
@@ -61,7 +61,7 @@ public class SpawnerEnemies : AnimationSprite
         e_alien.player1_ref = (parent as Level).player1_ref;
         e_alien.player2_ref = (parent as Level).player2_ref;
         e_alien.bullet_handler = (parent as Level).acid_handler;
-        parent.AddChildAt(e_alien, 0);
+        parent.AddChildAt(e_alien, 1);
         e_alien.x = this.x;
         e_alien.y = this.y;
     }
@@ -71,7 +71,7 @@ public class SpawnerEnemies : AnimationSprite
         EnemyRobot e_robot = new EnemyRobot();
         e_robot.player1_ref = (parent as Level).player1_ref;
         e_robot.player2_ref = (parent as Level).player2_ref;
-        parent.AddChildAt(e_robot, 0);
+        parent.AddChildAt(e_robot, 1);
         e_robot.x = this.x;
         e_robot.y = this.y;
     }

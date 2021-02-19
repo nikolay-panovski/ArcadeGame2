@@ -10,6 +10,7 @@ public class AlienPlayer : Player
     public AlienPlayer(string filename, int columns, int rows, TiledObject obj) : base(filename, columns, rows, obj)
     {
         HP = 3;
+        direction.x = 1;
     }
 
     private void movementHandle()

@@ -20,7 +20,7 @@ public class EnemyGeneric : AnimationSprite
     protected Vector2 direction = new Vector2(0, 0);
     protected float cooldown;
 
-    public EnemyGeneric(string filename, int columns, int rows) : base(filename, columns, rows, -1, false, true)
+    public EnemyGeneric(string filename, int columns, int rows, int frames) : base(filename, columns, rows, frames, false, true)
     {
         SetOrigin(width / 2, height / 2);
         floor_check = new Sprite("empty_16x16.png");
@@ -46,6 +46,8 @@ public class EnemyGeneric : AnimationSprite
 
     private void spawnBullet()
     {
+        SetCycle(6, 1);
+        Animate();
         RevolverBullet bullet = new RevolverBullet(this.x + this.width * direction.x, this.y + this.height * direction.y);
         bullet_handler.AddChild(bullet);
         new Sound("Enemy_Action_Rifle_Shot.wav").Play();
@@ -59,6 +61,7 @@ public class EnemyGeneric : AnimationSprite
 
     protected void ShootWithDistCooldown()
     {
+        SetCycle(0, 6, 12);
         cooldown += Time.deltaTime / 1000f;
         if (cooldown > 2 && (DistanceTo(player1_ref) < radius_dist || DistanceTo(player2_ref) < radius_dist))
         {
@@ -69,7 +72,11 @@ public class EnemyGeneric : AnimationSprite
             cooldown = 0;
         }
 
-        else if (cooldown < 1 || cooldown > 2) coll = MoveUntilCollision(-speed, 0);
+        else if (cooldown < 1 || cooldown > 2)
+        {
+            coll = MoveUntilCollision(-speed, 0);
+            Animate();
+        }
     }
 
     protected void HandleCollisions()
