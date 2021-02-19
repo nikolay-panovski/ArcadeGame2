@@ -114,6 +114,6 @@ public class HUD : EasyDraw
         if (player2_ref.bullet_cooldown == 0) cooldown_bullet.alpha = 1;
         else cooldown_bullet.alpha = 0;
 
-        if ((parent as Level).viewport.x < (parent as Level).level_width - (game as MyGame).width / 4) x += 0.3f;  // increment by the same as viewport
+        if ((parent as Level).viewport.x < (parent as Level).level_width - (game as MyGame).width / 4) x += 0.25f;  // increment by the same as viewport
     }
 }

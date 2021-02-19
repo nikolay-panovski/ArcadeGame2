@@ -217,8 +217,8 @@ public class Level : GameObject
     {
         if (viewport.x < level_width - (game as MyGame).width / 4)
         {
-            viewport.x += 0.3f;
-            background.x += 0.3f;
+            viewport.x += 0.25f;
+            background.x += 0.25f;
         }
         distance_score = ((int)viewport.x - (game as MyGame).width / 4) / 4;
     }
