@@ -61,6 +61,7 @@ public class MyGame : Game
 	{
 		game_over.LateDestroy();
 		RemoveChild(game_over);
+		total_lives = 5;
 		start_menu = new MainMenu();
 		AddChild(start_menu);
 	}

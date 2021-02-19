@@ -15,15 +15,15 @@ public class MainMenu : EasyDraw
     PrivateFontCollection custom_font = new PrivateFontCollection();
     FontFamily[] family;
     private string font_name = "";
-    public Sound main_menu_track;
+    //public Sound main_menu_track;
 
     public MainMenu() : base(MyGame.GAME_WIDTH * 2, MyGame.GAME_HEIGHT * 2, false)
     {
         options[0] = "START GAME";
         options[1] = "QUIT";
 
-        main_menu_track = new Sound("Song_Main_Menu.mp3", true);
-        main_menu_track.Play(false, 0);
+        //main_menu_track = new Sound("Song_Main_Menu.mp3", true);
+        //main_menu_track.Play(false, 0);
 
         // CUSTOM FONT SECTION - also apply to HUD
         custom_font.AddFontFile("spaceranger.ttf");
